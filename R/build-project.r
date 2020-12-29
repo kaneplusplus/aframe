@@ -210,7 +210,7 @@ af_get_analysis <- function() {
 #' default is `TRUE`?
 #' @param rproj_yaml the function to create the R Studio project yaml file. The
 #' default is `af_create_rproj_yaml()`.
-#' @importFrom fs dir_create path path_file
+#' @importFrom fs dir_create path path_file path_dir
 #' @importFrom yaml write_yaml
 #' @aliases af_create_study
 #' @export
@@ -238,7 +238,13 @@ af_create_analysis <- function(name, setwd = FALSE, ..., verbose = FALSE,
 af_create_study <- af_create_analysis
 
 #' @title Create a New Analysis Component
-#' 
+#'
+#' @param name the name of the new component. This parameter can be a path to
+#' location where the new component should be added. A component must
+#' be a subdirectory of an analysis.
+#' @param ... options to pass to `fs::dir_create()` in order to create the 
+#' directory.
+#' @seealso fs::dir_create
 #' @importFrom fs dir_create path_split
 #' @importFrom checkmate assert check_character
 af_create_component <- function(name, ...) {
@@ -256,60 +262,78 @@ af_create_component <- function(name, ...) {
   
   cat("Creating component: ", basename(name), "\n",
       "In directory: ", dirname(name), "\n")
-  dir_create(comp_name, ...)
+  dir_create(name, ...)
   # .Rproj extension.
+  invisible(TRUE)
 }
 
 # Put this off for now. Focus on project creation.
 # Need to get everyone on board before implementing these.
+
+#' @title Read a .rds File in an Analysis
+#'
+#' @param file a connection or the name of the file where the R object is
+#' saved to or read from.
+#' @param refhook a hook function for handling reference objects.
+#' @seealso readRDS
+#' @export
 af_read_rds <- function(file, refhook = NULL) {
   readRDS(file, refhook)
 }
 
+#' @title Save a .rds File in an Analysis
+#'
+#' @param object R object to serialize.
+#' @param file a connection or the name of the file where the R object is
+#' saved to or read from.
+#' @param ascii a logical.  If ‘TRUE’ or ‘NA’, an ASCII representation is
+#' written; otherwise (default), a binary one is used.  See the
+#' comments in the help for ‘save’.
+#' @param version the workspace format version to use.  ‘NULL’ specifies the
+#' current default version (3). The only other supported value
+#' is 2, the default from R 1.4.0 to R 3.5.0.
+#' @param compress a logical specifying whether saving to a named file is to use
+#' ‘"gzip"’ compression, or one of ‘"gzip"’, ‘"bzip2"’ or ‘"xz"’
+#' to indicate the type of compression to be used.  Ignored if
+#' ‘file’ is a connection.
+#' @param refhook a hook function for handling reference objects.
+#' @seealso saveRDS
+#' @export
 af_save_rds <- function(object, file = "", ascii = FALSE, version = NULL,
                         compress = TRUE, refhook = NULL) {
   saveRDS(object, file, ascii, version, compress, refhook)
 }
 
-af_source <- function(
-  file, local = FALSE, echo = verbose, print.eval = echo,
-  exprs, spaced = use_file,
-  verbose = getOption("verbose"),
-  prompt.echo = getOption("prompt"),
-  max.deparse.length = 150, width.cutoff = 60L,
-  deparseCtrl = "showAttributes",
-  chdir = FALSE,
-  encoding = getOption("encoding"),
-  continue.echo = getOption("continue"),
-  skip.echo = 0, keep.source = getOption("keep.source")) {
-
-  source(file, local, echo, print.eval, exprs, spaced, verbose,
-         prompt.echo, max.deparse.length, width.cutoff, deparseCtrl,
-         chdir, encoding, continue.echo, skip.echo, 
-         keep.source)
+#' Source a File in an Analysis
+#'
+#' @param ... options to pass to the `source()` function.
+#' @seealso source
+#' @export
+af_source <- function(...) {
+  source(...)
 }
 
 # The following could be implemented.
-af_switch_analysis <- function(analysis_name) {
-}
+#af_switch_analysis <- function(analysis_name) {
+#}
 
-af_exit_analysis <- function() {
-}
+#af_exit_analysis <- function() {
+#}
 
-af_switch_project <- function(proj_name) {
-}
+#af_switch_project <- function(proj_name) {
+#}
 
-af_switch_proj
+#af_switch_proj
 
-af_exit_project <- function() {
-}
+#af_exit_project <- function() {
+#}
 
-af_exit_proj <- function() {
-}
+#af_exit_proj <- function() {
+#}
 
-af_pushd <- function(path <- ".") {
-}
+#af_pushd <- function(path <- ".") {
+#}
 
-af_popd <- function() {
-}
+#af_popd <- function() {
+#}
 
