@@ -19,6 +19,8 @@ test_that("Analysis framework creation works.", {
   expect_error(af_create_component("../../clean-data"))
 
   expect_true(af_create_component("study-1/clean-data"))
+  
+  expect_true(af_create_component("explore-data"))
 
 #  write_if_make_reference(site_yaml, "site_yaml.rds")
 
