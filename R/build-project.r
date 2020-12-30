@@ -64,14 +64,14 @@ af_proj_root <- function() {
 
 #' @title Get the Path of the Current Project
 #' @export
-af_project_dir <- function() {
-  af_proj_root()$find_file()
+af_project_dir <- function(path = ".") {
+  af_proj_root()$find_file(path = path)
 }
 
 #' @title Get the Path of the Current Analysis
 #' @export
-af_analysis_dir <- function() {
-  af_analysis_root()$find_file()
+af_analysis_dir <- function(path = ".") {
+  af_analysis_root()$find_file(path = path)
 }
 
 
@@ -91,17 +91,17 @@ is_error <- function(expr) {
 }
 
 #' @importFrom checkmate check_class
-has_rproj_root <- function(rc) {
+has_rproj_root <- function(rc, path = ".") {
   assert(check_class(rc, "root_criterion"))
-  !is_error(rc$find_file())
+  !is_error(rc$find_file(path = path))
 }
 
-af_is_proj <- function() {
-  has_rproj_root(af_proj_root())
+af_is_proj <- function(path = ".") {
+  has_rproj_root(af_proj_root(), path = path)
 }
 
-af_is_analysis <- function() {
-  has_rproj_root(af_analysis_root())
+af_is_analysis <- function(path = ".") {
+  has_rproj_root(af_analysis_root(), path = path)
 }
 
 #' @title Create a New Analysis Project
@@ -128,7 +128,7 @@ af_create_project <-
              path(proj_path, ".afproj"))
   if (setwd) {
     if (verbose) {
-      cat("Changing the directory to ", proj_path, "\n")
+      cat("\nChanging the directory to", proj_path, "\n\n")
     }
     setwd(proj_path)
   }
@@ -222,8 +222,8 @@ af_create_analysis <- function(name, setwd = FALSE, ..., verbose = FALSE,
   if (af_is_proj() && path_dir(name) == ".") {
     name <- path(af_project_dir(), name)
   }
-  cat("Creating analysis: ", basename(name), "\n",
-      "In directory: ", dirname(name), "\n\n", sep = "")
+  cat("\nCreating analysis: ", basename(name), "\n",
+      "In directory: ", dirname(path_abs(name)), "\n\n", sep = "")
   dir_create(name, ...)
   write_yaml(rproj_yaml,
              path(name, path_file(name), ext = "rproj"))
@@ -242,28 +242,55 @@ af_create_study <- af_create_analysis
 #' @param name the name of the new component. This parameter can be a path to
 #' location where the new component should be added. A component must
 #' be a subdirectory of an analysis.
+#' @param bare should the bare path be used to create the component. The
+#' default is `FALSE` meaning you if you specify "component" in an
+#' analysis or "analysis/component" in a project, the component
+#' will be installed in the proper location. Bare allows you to provide
+#' a relative or absolute path to the analysis where the component will be
+#' installed.
+#' is being added to an analysis. The default is FALSE.
 #' @param ... options to pass to `fs::dir_create()` in order to create the 
 #' directory.
+#' @param setwd should the working directory be set to the new component
+#' directory? The default is FALSE.
+#' @param verbose should extra information be printed. The default is `TRUE`.
 #' @seealso fs::dir_create
-#' @importFrom fs dir_create path_split
+#' @importFrom fs dir_create path_split path_abs
 #' @importFrom checkmate assert check_character
-af_create_component <- function(name, ...) {
+af_create_component <- 
+  function(name, bare = FALSE, ..., setwd = FALSE, verbose = TRUE) {
+
   assert(
     check_character(name)
   )
 
   nv <- unlist(path_split(name))
-  if ( !(length(nv) == 1 && af_is_analysis()) ) {
-    # Make sure an af anaysis is being referenced.
+ 
+  if (!bare) { 
+    if (length(nv) == 1) {
+      name <- path(af_analysis_dir(), name)
+      # Make sure an af anaysis is being referenced.
+    } else if (length(nv) == 2) {
+      name <- path(af_project_dir(), name)
+    } else {
+      stop("You must specify either a component or an analysis/component\n",
+           "  path relative to the current analysis or project.")
+    }
   }
-#  if (!is_analysis) {
-#    stop("You can only create components from within an analyis.")
-#  }
-  
-  cat("Creating component: ", basename(name), "\n",
-      "In directory: ", dirname(name), "\n")
+  name <- path_abs(name)
+  if (!af_is_analysis(path_dir(name))) {
+    stop("A component must be created in a subdirectory of an analysis.")
+  }
+ 
+  if (verbose) { 
+    cat("\nCreating component: ", basename(name), "\n",
+        "In directory: ", dirname(path_abs(name)), "\n\n", sep = "")
+  }
   dir_create(name, ...)
   # .Rproj extension.
+  if (setwd) {
+    setwd(name)
+  }
   invisible(TRUE)
 }
 
