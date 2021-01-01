@@ -97,7 +97,7 @@ af_create_project <-
              path(proj_path, ".afproj"))
   if (setwd) {
     if (verbose) {
-      cat("\nChanging the directory to", proj_path, "\n\n")
+      cat("\nSetting the directory to", proj_path, "\n\n")
     }
     setwd(proj_path)
   }
@@ -183,7 +183,7 @@ af_get_analysis <- function() {
 #' @importFrom yaml write_yaml
 #' @aliases af_create_study
 #' @export
-af_create_analysis <- function(name, setwd = FALSE, ..., verbose = FALSE,
+af_create_analysis <- function(name, setwd = FALSE, ..., verbose = TRUE,
                                rproj_yaml = af_create_rproj_yaml()) {
 
   # If create_analysis is called from inside an analysis project, then 
@@ -196,8 +196,10 @@ af_create_analysis <- function(name, setwd = FALSE, ..., verbose = FALSE,
   dir_create(name, ...)
   write_yaml(rproj_yaml,
              path(name, path_file(name), ext = "rproj"))
-  cat("Setting working directory to", path(name), "\n\n")
   if (setwd) {
+    if (verbose) {
+      cat("Setting working directory to", path(name), "\n\n")
+    }
     setwd(name)
   }
   invisible(TRUE)
