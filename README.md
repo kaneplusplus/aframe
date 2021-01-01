@@ -1,12 +1,11 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
-
-# aframe
+# aframe <a href='https://github.com/kaneplusplus/aframe'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/The_Bennati_House%2C_Lake_Arrowhead%2C_California.jpg/2560px-The_Bennati_House%2C_Lake_Arrowhead%2C_California.jpg' align="right" height="139" /></a>
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/kaneplusplus/aframe/workflows/R-CMD-check/badge.svg)](https://github.com/kaneplusplus/aframe/actions)
-[![Coveralls test coverage](https://coveralls.io/repos/github/kaneplusplus/aframe/badge.svg)](https://coveralls.io/r/kaneplusplus/aframe?branch=main)
 <!-- badges: end -->
 
 ## Installation
@@ -16,4 +15,3 @@ You can install the development version of aframe with:
 ``` r
 devtools::install_github("kaneplusplus/aframe")
 ```
-
