@@ -106,11 +106,13 @@ af_create_project <-
 
 #' @title The Analysis Project Tree
 #'
+#' @param path the path to look for the analysis. The default is the current 
+#' working directory.
 #' @aliases af_ptree 
 #' @importFrom fs dir_tree
 #' @export
-af_project_tree <- function() {
-  dir_tree(af_project_dir(), all = FALSE)
+af_project_tree <- function(path = ".") {
+  dir_tree(af_project_dir(path = path), all = FALSE)
 }
 
 #' @export
@@ -118,11 +120,13 @@ af_ptree <- af_project_tree
 
 #' @title The Analysis Tree
 #'
+#' @param path the path to look for the analysis. The default is the current 
+#' working directory.
 #' @aliases af_atree 
 #' @importFrom fs dir_tree
 #' @export
-af_analysis_tree <- function() {
-  dir_tree(af_analysis_dir(), all = FALSE)
+af_analysis_tree <- function(path = ".") {
+  dir_tree(af_analysis_dir(path = path), all = FALSE)
 }
 
 #' @export
