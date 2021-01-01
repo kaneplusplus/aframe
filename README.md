@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/kaneplusplus/aframe/workflows/R-CMD-check/badge.svg)](https://github.com/kaneplusplus/aframe/actions)
+[![Coverage
+Status](https://coveralls.io/repos/github/kaneplusplus/aframe/badge.svg?branch=main)](https://coveralls.io/github/kaneplusplus/aframe?branch=main)
 <!-- badges: end -->
 
 ## Installation
