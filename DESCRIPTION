@@ -16,7 +16,7 @@ RoxygenNote: 7.1.1
 Suggests: 
     testthat (>= 3.0.0),
     covr
-Depends:
+Imports:
   rprojroot,
   checkmate,
   fs,

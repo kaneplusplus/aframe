@@ -228,6 +228,7 @@ af_create_study <- af_create_analysis
 #' @seealso fs::dir_create
 #' @importFrom fs dir_create path_split path_abs
 #' @importFrom checkmate assert check_character
+#' @export
 af_create_component <- 
   function(name, bare = FALSE, ..., setwd = FALSE, verbose = TRUE) {
 
